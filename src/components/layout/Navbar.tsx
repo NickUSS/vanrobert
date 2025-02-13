@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AnimatedButton from '../buttons/AnimatedButton'
 
 const navItems = [
-    { name: 'Arte', href: '/arte' },
-    { name: 'Moda', href: '/moda' },
-    { name: 'Foro', href: '/foro' },
+    { name: 'Art', href: '/arte' },
+    { name: 'Fashion', href: '/moda' },
+    { name: 'Shop', href: '/tienda' },
 ];
 
 export default function Navbar() {
@@ -58,7 +58,7 @@ export default function Navbar() {
             className={`fixed w-full z-50 transition-all duration-500 ${
                 isScrolled
                     ? 'bg-white/95 backdrop-blur-md shadow-lg'
-                    : 'bg-transparent'
+                    : 'bg-gradient-to-b from-black/50 to-transparent py-2'
             }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,6 +67,7 @@ export default function Navbar() {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        className="w-[200px]" // Ancho fijo para el logo
                     >
                         <Link href="/" className="flex items-center">
                             <div className="relative w-[200px] h-[80px]">
@@ -76,102 +77,115 @@ export default function Navbar() {
                                     fill
                                     priority
                                     sizes="200px"
-                                    className={`object-contain transition-all duration-300 ${
-                                        isScrolled ? 'brightness-90' : 'brightness-100'
-                                    }`}
+                                    className={`object-contain transition-all duration-300 
+                                    ${isScrolled ? 'brightness-90' : 'brightness-100 filter-white'}`}
                                 />
                             </div>
                         </Link>
                     </motion.div>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-1">
-                        {navItems.map((item, index) => (
-                            <motion.div
-                                key={item.name}
-                                custom={index}
-                                variants={itemVariants}
-                                onHoverStart={() => setActiveItem(item.name)}
-                                onHoverEnd={() => setActiveItem('')}
-                            >
-                                <Link
-                                    href={item.href}
-                                    className={`relative px-4 py-2 mx-2 rounded-lg transition-all duration-300 ${
-                                        isScrolled
-                                            ? 'text-gray-800 hover:text-black'
-                                            : 'text-white hover:text-white'
-                                    }`}
+                    {/* Desktop Navigation - Centrado */}
+                    <div className="hidden md:flex flex-1 justify-center items-center">
+                        <div className={`flex flex-row items-center space-x-8 ${
+                            isScrolled ? '' : 'bg-black/20 backdrop-blur-sm rounded-full px-6 py-2'
+                        } transition-all duration-300`}>
+                            {navItems.map((item, index) => (
+                                <motion.div
+                                    key={item.name}
+                                    custom={index}
+                                    variants={itemVariants}
+                                    onHoverStart={() => setActiveItem(item.name)}
+                                    onHoverEnd={() => setActiveItem('')}
+                                    className="relative"
                                 >
-                                    {item.name}
-                                    {activeItem === item.name && (
-                                        <motion.div
-                                            layoutId="underline"
-                                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-current"
-                                            initial={false}
-                                            transition={{
-                                                type: "spring",
-                                                stiffness: 300,
-                                                damping: 30
-                                            }}
-                                        />
-                                    )}
-                                </Link>
-                            </motion.div>
-                        ))}
-
-                        <div className="ml-4 flex space-x-3">
-                            <AnimatedButton
-                                variant="secondary"
-                                className={`border-2 ${
-                                    isScrolled
-                                        ? 'border-black text-black hover:bg-black hover:text-white'
-                                        : 'border-white text-white hover:bg-white hover:text-black'
-                                }`}
-                            >
-                                Iniciar Sesión
-                            </AnimatedButton>
-                            <AnimatedButton
-                                variant="primary"
-                                className={`${
-                                    isScrolled
-                                        ? 'bg-black text-white hover:bg-gray-800'
-                                        : 'bg-white text-black hover:bg-gray-100'
-                                }`}
-                            >
-                                Registrarse
-                            </AnimatedButton>
+                                    <Link
+                                        href={item.href}
+                                        className={`relative px-4 py-2 transition-all duration-300 
+                                        ${isScrolled
+                                            ? 'text-gray-800 hover:text-black'
+                                            : 'text-white hover:text-white/80'
+                                        }`}
+                                    >
+                                        {item.name}
+                                        {activeItem === item.name && (
+                                            <motion.div
+                                                layoutId="underline"
+                                                className={`absolute bottom-0 left-0 right-0 h-0.5 
+                                                ${isScrolled ? 'bg-black' : 'bg-white'}`}
+                                                initial={false}
+                                                transition={{
+                                                    type: "spring",
+                                                    stiffness: 300,
+                                                    damping: 30
+                                                }}
+                                            />
+                                        )}
+                                    </Link>
+                                </motion.div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <motion.button
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="md:hidden p-2 rounded-lg hover:bg-white/10"
-                    >
-                        <svg
-                            className={`w-6 h-6 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                    {/* Authentication Buttons */}
+                    <div className="hidden md:flex items-center gap-2 w-[200px] justify-end">
+                        <AnimatedButton
+                            variant="secondary"
+                            className={`inline-flex items-center justify-center whitespace-nowrap ${
+                                isScrolled
+                                    ? 'border-black text-black hover:bg-black hover:text-white'
+                                    : 'border-white text-white hover:bg-white/20'
+                            } backdrop-blur-sm text-sm px-4 py-2 rounded-full`}
                         >
-                            {isMobileMenuOpen ? (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            ) : (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            )}
-                        </svg>
-                    </motion.button>
+                            Sign In
+                        </AnimatedButton>
+                        <AnimatedButton
+                            variant="primary"
+                            className={`inline-flex items-center justify-center whitespace-nowrap ${
+                                isScrolled
+                                    ? 'bg-black text-white hover:bg-gray-800'
+                                    : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
+                            } text-sm px-4 py-2 rounded-full`}
+                        >
+                            Sign Up
+                        </AnimatedButton>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <motion.button
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className={`p-2 rounded-lg ${
+                                isScrolled
+                                    ? 'hover:bg-gray-100'
+                                    : 'bg-black/20 backdrop-blur-sm hover:bg-white/10'
+                            }`}
+                            aria-label="Menu"
+                        >
+                            <svg
+                                className={`w-6 h-6 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                {isMobileMenuOpen ? (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                ) : (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                )}
+                            </svg>
+                        </motion.button>
+                    </div>
                 </div>
             </div>
 
@@ -199,7 +213,11 @@ export default function Navbar() {
                                 height: { duration: 0.3 }
                             }
                         }}
-                        className="md:hidden bg-white border-t"
+                        className={`md:hidden ${
+                            isScrolled
+                                ? 'bg-white border-t'
+                                : 'bg-black/80 backdrop-blur-md'
+                        }`}
                     >
                         <div className="px-4 py-6 space-y-3">
                             {navItems.map((item, index) => (
@@ -223,7 +241,11 @@ export default function Navbar() {
                                 >
                                     <Link
                                         href={item.href}
-                                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                                        className={`block px-4 py-2 rounded-lg transition-colors ${
+                                            isScrolled
+                                                ? 'text-gray-800 hover:bg-gray-100'
+                                                : 'text-white hover:bg-white/10'
+                                        }`}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                     >
                                         {item.name}
@@ -233,13 +255,21 @@ export default function Navbar() {
                             <div className="space-y-2 pt-4">
                                 <AnimatedButton
                                     variant="secondary"
-                                    className="w-full border-2 border-black text-black hover:bg-black hover:text-white"
+                                    className={`w-full ${
+                                        isScrolled
+                                            ? 'border-black text-black hover:bg-black hover:text-white'
+                                            : 'border-white text-white hover:bg-white/20'
+                                    }`}
                                 >
                                     Iniciar Sesión
                                 </AnimatedButton>
                                 <AnimatedButton
                                     variant="primary"
-                                    className="w-full bg-black text-white hover:bg-gray-800"
+                                    className={`w-full ${
+                                        isScrolled
+                                            ? 'bg-black text-white hover:bg-gray-800'
+                                            : 'bg-white/20 text-white hover:bg-white/30'
+                                    }`}
                                 >
                                     Registrarse
                                 </AnimatedButton>

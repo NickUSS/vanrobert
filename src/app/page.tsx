@@ -4,23 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import AnimatedBackground from '@/components/common/AnimatedBackground';
 import AnnouncementBanner from '@/components/home/AnnouncementBanner';
 import EventsSection from '@/components/home/EventsSection';
 import InstagramFeed from '@/components/home/InstagramFeed';
-import Newsletter from '@/components/home/Newsletter';
 import Testimonials from '@/components/home/Testimonials';
 import Stats from '@/components/home/Stats';
 import AdvancedFilters from '@/components/filters/AdvancedFilters';
 import CustomCursor from '@/components/common/CustomCursor';
 import { PriceRange, SortOption } from '@/types/art';
-
-// Interfaces
-interface Theme {
-    background: string;
-    text: string;
-    accent: string;
-}
 
 interface FilterState {
     price: PriceRange;
@@ -28,20 +19,6 @@ interface FilterState {
     date: string;
     category: string;
 }
-
-// Constantes
-const THEME = {
-    light: {
-        background: 'bg-white',
-        text: 'text-black',
-        accent: 'bg-black'
-    },
-    dark: {
-        background: 'bg-black',
-        text: 'text-white',
-        accent: 'bg-white'
-    }
-} as const;
 
 const GALLERY_IMAGES = [2, 3, 4].map(num => ({
     id: num,
@@ -78,12 +55,21 @@ export default function HomePage() {
     });
     const [showScrollTop, setShowScrollTop] = useState(false);
 
-    // Efectos
+    // Estado del banner con persistencia
+    const [showAnnouncement, setShowAnnouncement] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('announcementBannerVisible') !== 'false';
+        }
+        return true;
+    });
+
+    // Efecto para el loading inicial
     useEffect(() => {
         const timer = setTimeout(() => setIsLoading(false), 2000);
         return () => clearTimeout(timer);
     }, []);
 
+    // Efecto para el scroll
     useEffect(() => {
         const handleScroll = () => {
             setShowScrollTop(window.scrollY > 500);
@@ -93,7 +79,13 @@ export default function HomePage() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Handlers
+    // Handler para cerrar el banner
+    const handleAnnouncementClose = () => {
+        setShowAnnouncement(false);
+        localStorage.setItem('announcementBannerVisible', 'false');
+    };
+
+    // Handler para los filtros
     const handleFilterChange = <T extends keyof FilterState>(
         type: T,
         value: FilterState[T]
@@ -101,6 +93,7 @@ export default function HomePage() {
         setFilters(prev => ({ ...prev, [type]: value }));
     };
 
+    // Handler para scroll to top
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -108,57 +101,83 @@ export default function HomePage() {
         });
     };
 
-    if (isLoading) return <LoadingSpinner />;
+    if (isLoading) {
+        return (
+            <div className="h-screen flex items-center justify-center">
+                <LoadingSpinner />
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-white">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="min-h-screen bg-white"
+        >
             <CustomCursor />
-            <AnnouncementBanner />
 
-            <HeroSection />
-            <Stats />
-
-            <GallerySection
-                filters={filters}
-                handleFilterChange={handleFilterChange}
-                activeImage={activeImage}
-                setActiveImage={setActiveImage}
+            <AnnouncementBanner
+                isVisible={showAnnouncement}
+                onClose={handleAnnouncementClose}
             />
 
-            <ShopSection />
-            <EventsSection />
-            <InstagramFeed />
-            <Testimonials />
-            <NewsletterSection />
+            {/* Contenedor principal con padding-top dinámico */}
+            <div className={`relative transition-all duration-300 ease-in-out
+                           ${showAnnouncement ? 'pt-[46px]' : ''}`}
+            >
+                <HeroSection />
 
-            <ScrollToTopButton
-                show={showScrollTop}
-                onClick={scrollToTop}
-            />
-        </div>
+                <main className="relative z-10">
+                    <Stats />
+                    <GallerySection
+                        filters={filters}
+                        handleFilterChange={handleFilterChange}
+                        activeImage={activeImage}
+                        setActiveImage={setActiveImage}
+                    />
+                    <ShopSection />
+                    <EventsSection />
+                    <InstagramFeed />
+                    <Testimonials />
+                    <NewsletterSection />
+                </main>
+
+                <AnimatePresence>
+                    <ScrollToTopButton
+                        show={showScrollTop}
+                        onClick={scrollToTop}
+                    />
+                </AnimatePresence>
+            </div>
+        </motion.div>
     );
 }
 
 // Hero Section Component
 const HeroSection = () => (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <AnimatedBackground />
-        <div className="absolute inset-0 bg-black">
+        {/* Imagen de fondo */}
+        <div className="absolute inset-0">
             <Image
                 src="/images/1.jpeg"
-                alt="Hero"
+                alt="Hero background"
                 fill
                 priority
-                className="object-cover opacity-50 mix-blend-overlay"
+                className="object-cover"
             />
+            {/* Overlay con gradiente mejorado */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/40" />
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        {/* Contenido */}
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
             <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="text-5xl md:text-7xl font-bold mb-6 text-white"
+                className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg"
             >
                 Van Robert
             </motion.h1>
@@ -166,43 +185,53 @@ const HeroSection = () => (
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-xl md:text-2xl mb-8 text-white"
+                className="text-xl md:text-2xl mb-8 text-white/90 drop-shadow-md"
             >
                 Arte • Diseño • Moda
             </motion.p>
-            <HeroButtons />
+            <div className="flex justify-center items-center">
+                <HeroButtons />
+            </div>
         </div>
 
         <ScrollIndicator />
     </section>
 );
 
+// HeroButtons Component
 const HeroButtons = () => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="flex flex-col sm:flex-row gap-4 justify-center"
-    >
+    <div className="flex flex-row space-x-4"> {/* Cambiado a space-x-4 y flex-row */}
         <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-white text-black px-8 py-3 rounded-full text-lg font-medium
-                     hover:bg-gray-100 transition-all duration-300"
+            className="bg-white/90 backdrop-blur-sm text-black px-8 py-3
+                     rounded-full text-lg font-medium hover:bg-white
+                     transition-all duration-300 shadow-lg hover:shadow-xl
+                     transform hover:-translate-y-0.5"
         >
             Explorar Colección
         </motion.button>
         <motion.button
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="border-2 border-white text-white px-8 py-3 rounded-full text-lg
-                     font-medium hover:bg-white hover:text-black transition-all duration-300"
+            className="border-2 border-white/90 backdrop-blur-sm text-white
+                     px-8 py-3 rounded-full text-lg font-medium
+                     hover:bg-white/20 transition-all duration-300
+                     shadow-lg hover:shadow-xl transform
+                     hover:-translate-y-0.5"
         >
             Conocer Más
         </motion.button>
-    </motion.div>
+    </div>
 );
 
+// ScrollIndicator Component
 const ScrollIndicator = () => (
     <motion.div
         initial={{ opacity: 0 }}
@@ -213,13 +242,14 @@ const ScrollIndicator = () => (
         <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-white rounded-full relative"
+            className="w-6 h-10 border-2 border-white rounded-full relative
+                     shadow-lg backdrop-blur-sm"
         >
             <motion.div
                 animate={{ y: [0, 12, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1 h-2 bg-white rounded-full absolute left-1/2 top-2
-                         transform -translate-x-1/2"
+                className="w-1 h-2 bg-white rounded-full absolute
+                         left-1/2 top-2 transform -translate-x-1/2"
             />
         </motion.div>
     </motion.div>
@@ -370,12 +400,12 @@ const ShopItem = ({ section }: ShopItemProps) => (
 
 // NewsletterSection
 const NewsletterSection = () => (
-    <section className="relative py-20 bg-black text-white overflow-hidden">
+    <section className="relative py-20 bg-black text-white">
         <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="container mx-auto px-4 text-center relative z-10"
+            className="container mx-auto px-4 text-center"
         >
             <div className="max-w-2xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -388,9 +418,6 @@ const NewsletterSection = () => (
                 <NewsletterForm />
             </div>
         </motion.div>
-        <div className="absolute inset-0 opacity-10">
-            <AnimatedBackground />
-        </div>
     </section>
 );
 

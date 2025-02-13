@@ -27,6 +27,11 @@
 
         /* Sombras */
         --shadow: 0 0% 0%;
+
+        /* Colores para el AnnouncementBanner */
+        --particle-color-1: 0 0% 100%; /* Blanco */
+        --particle-color-2: 0 0% 90%;  /* Gris claro */
+        --particle-color-3: 0 0% 80%;  /* Gris medio */
     }
 }
 
@@ -54,4 +59,52 @@
     .btn-secondary {
         @apply border-2 border-black text-black hover:bg-black hover:text-white transition-colors;
     }
+}
+
+/* Animación de rebote para el emoji en el AnnouncementBanner */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+/* Desactivar animaciones si el usuario prefiere reducir el movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .animate-bounce {
+        animation: none;
+    }
+}
+
+/* Estilos específicos para el AnnouncementBanner */
+.announcement-banner {
+    @apply fixed top-0 left-0 right-0 z-50 shadow-md;
+    background-color: black;
+    transition: all 0.3s ease-in-out;
+}
+
+.announcement-link {
+    @apply underline hover:text-gray-300 transition-colors inline-flex items-center;
+}
+
+@layer utilities {
+    .filter-white {
+        filter: brightness(0) invert(1);
+    }
+}
+
+.announcement-close {
+    @apply absolute right-4 top-1/2 transform -translate-y-1/2
+    w-6 h-6 flex items-center justify-center
+    hover:bg-white/20 rounded-full transition-all
+    text-xl font-bold focus:outline-none focus:ring-2
+    focus:ring-white/50 active:scale-95;
 }

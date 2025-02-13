@@ -21,8 +21,12 @@ export default function AnimatedButton({
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
             className={`
-                px-6 py-2 rounded-full font-medium
+                inline-flex items-center justify-center
+                px-4 py-2 rounded-full
+                text-sm font-medium
                 transition-all duration-300
+                whitespace-nowrap
+                ${variant === 'primary' ? 'min-w-[80px]' : 'min-w-[70px]'}
                 ${className}
             `}
         >
