@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Colores base */
+        --background: 0 0% 100%; /* Blanco */
+        --foreground: 0 0% 0%; /* Negro */
+
+        /* Colores de sección */
+        --section-light: 0 0% 98%; /* Gris muy claro para secciones alternadas */
+        --section-dark: 0 0% 0%; /* Negro para secciones oscuras */
+
+        /* Colores de texto */
+        --text-primary: 0 0% 0%;
+        --text-secondary: 0 0% 40%;
+        --text-white: 0 0% 100%;
+
+        /* Colores de acento */
+        --accent: 0 0% 95%;
+        --accent-foreground: 0 0% 0%;
+
+        /* Colores de borde */
+        --border-light: 0 0% 90%;
+        --border-dark: 0 0% 20%;
+
+        /* Sombras */
+        --shadow: 0 0% 0%;
+    }
+}
+
+@layer components {
+    .section-light {
+        @apply bg-white;
+    }
+
+    .section-dark {
+        @apply bg-black text-white;
+    }
+
+    .section-alternate {
+        @apply bg-[hsl(var(--section-light))];
+    }
+
+    .card {
+        @apply bg-white rounded-xl shadow-lg overflow-hidden;
+    }
+
+    .btn-primary {
+        @apply bg-black text-white hover:bg-gray-800 transition-colors;
+    }
+
+    .btn-secondary {
+        @apply border-2 border-black text-black hover:bg-black hover:text-white transition-colors;
+    }
+}
