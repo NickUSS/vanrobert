@@ -1,16 +1,86 @@
 'use client'
-import { useState, useEffect } from 'react'
+import {useState, useEffect, JSX} from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import AnimatedButton from '../buttons/AnimatedButton'
 
-// Definir interfaces
+// Iconos SVG
+const Icons = {
+    Courses: ({ className }: { className?: string }) => (
+        <svg
+            className={className}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+    ),
+    AboutMe: ({ className }: { className?: string }) => (
+        <svg
+            className={className}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="7" r="4"/>
+            <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+        </svg>
+    ),
+    Projects: ({ className }: { className?: string }) => (
+        <svg
+            className={className}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+        </svg>
+    ),
+    Exhibitions: ({ className }: { className?: string }) => (
+        <svg
+            className={className}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M9 21V9"/>
+        </svg>
+    ),
+};
+
+// Interfaces
 interface SubMenuItem {
     name: string;
     description: string;
     href: string;
-    icon: string;
+    Icon: ({ className }: { className?: string }) => JSX.Element;
 }
 
 interface NavItem {
@@ -25,7 +95,7 @@ interface DesktopNavItemProps {
     index: number;
 }
 
-// Definir las variantes de animación
+// Variantes de animación
 const itemVariants = {
     hidden: { opacity: 0, x: 20 },
     visible: (i: number) => ({
@@ -48,25 +118,25 @@ const navItems: NavItem[] = [
                 name: 'Courses',
                 description: 'Explore our art courses and workshops for all levels',
                 href: '/art/courses',
-                icon: '🎨'
+                Icon: Icons.Courses
             },
             {
                 name: 'About Me',
                 description: 'Learn about my journey and artistic philosophy',
                 href: '/art/about',
-                icon: '👨‍🎨'
+                Icon: Icons.AboutMe
             },
             {
                 name: 'Projects',
                 description: 'Discover my latest artistic projects and collaborations',
                 href: '/art/projects',
-                icon: '🎯'
+                Icon: Icons.Projects
             },
             {
                 name: 'Exhibitions',
                 description: 'View upcoming and past art exhibitions',
                 href: '/art/exhibitions',
-                icon: '🏛️'
+                Icon: Icons.Exhibitions
             }
         ]
     },
@@ -129,9 +199,13 @@ const DesktopNavItem = ({ item, isScrolled, index }: DesktopNavItemProps) => {
                                         } group`}
                                     >
                                         <div className="flex items-center">
-                                            <span className="text-2xl mr-3 group-hover:scale-110 transition-transform">
-                                                {subItem.icon}
-                                            </span>
+                                            <div className="mr-3 flex-shrink-0">
+                                                <subItem.Icon className={`w-6 h-6 ${
+                                                    isScrolled
+                                                        ? 'text-gray-800 group-hover:text-black'
+                                                        : 'text-white group-hover:text-white/90'
+                                                }`} />
+                                            </div>
                                             <div>
                                                 <p className="font-medium">{subItem.name}</p>
                                                 <p className={`text-sm ${
@@ -343,11 +417,17 @@ export default function Navbar() {
                                                             isScrolled
                                                                 ? 'text-gray-600 hover:bg-gray-100'
                                                                 : 'text-gray-300 hover:bg-white/10'
-                                                        }`}
+                                                        } group`}
                                                         onClick={() => setIsMobileMenuOpen(false)}
                                                     >
-                                                        <span className="mr-2">{subItem.icon}</span>
-                                                        {subItem.name}
+                                                        <div className="flex items-center">
+                                                            <subItem.Icon className={`w-5 h-5 mr-2 ${
+                                                                isScrolled
+                                                                    ? 'text-gray-600 group-hover:text-gray-900'
+                                                                    : 'text-gray-300 group-hover:text-white'
+                                                            }`} />
+                                                            {subItem.name}
+                                                        </div>
                                                     </Link>
                                                 ))}
                                             </div>
