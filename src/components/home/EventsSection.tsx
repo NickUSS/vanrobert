@@ -1,93 +1,123 @@
 'use client'
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import {useEffect, useState} from 'react';
+import { useState } from 'react';
+import AdvancedFilters from '@/components/filters/AdvancedFilters';
+import { PriceRange, SortOption } from '@/types/art';
 
-interface Event {
+interface Course {
     id: string;
     title: string;
     date: Date;
     location: string;
     description: string;
     image: string;
-    category: 'art' | 'fashion' | 'exhibition';
-    price?: string;
-    capacity?: number;
+    category: 'painting' | 'technique' | 'masterclass';
+    price: string;
+    duration: string;
+    capacity: number;
+    level: 'beginner' | 'intermediate' | 'advanced';
 }
 
-const events: Event[] = [
+const courses: Course[] = [
     {
         id: '1',
-        title: 'Exposición de Arte Moderno',
+        title: 'Oil Painting Masterclass',
         date: new Date('2024-03-15'),
-        location: 'Galería Principal',
-        description: 'Una exposición única que explora las últimas tendencias en arte contemporáneo.',
-        image: 'https://images.unsplash.com/photo-1545033131-485ea67fd7c3?w=800&q=80',
-        category: 'exhibition',
-        price: '$50',
-        capacity: 200
+        location: 'Main Studio',
+        description: 'Master the art of oil painting with Van Robert. Learn professional techniques and develop your unique style.',
+        image: '/images/courses/oil-painting.jpg',
+        category: 'masterclass',
+        price: '$499',
+        duration: '8 weeks',
+        capacity: 8,
+        level: 'intermediate'
     },
     {
         id: '2',
-        title: 'Desfile de Moda Primavera',
+        title: 'Contemporary Art Techniques',
         date: new Date('2024-04-20'),
-        location: 'Salón Central',
-        description: 'Presentación exclusiva de las últimas colecciones de diseñadores emergentes.',
-        image: 'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=800&q=80',
-        category: 'fashion',
-        price: '$75',
-        capacity: 150
+        location: 'Art Studio',
+        description: 'Explore modern art techniques and experimental approaches to painting.',
+        image: '/images/courses/contemporary.jpg',
+        category: 'technique',
+        price: '$399',
+        duration: '6 weeks',
+        capacity: 10,
+        level: 'advanced'
     },
     {
         id: '3',
-        title: 'Subasta de Arte',
+        title: 'Foundation Painting Course',
         date: new Date('2024-05-10'),
-        location: 'Sala VIP',
-        description: 'Subasta exclusiva de obras de artistas reconocidos internacionalmente.',
-        image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&q=80',
-        category: 'art',
-        price: 'Entrada Libre',
-        capacity: 100
+        location: 'Learning Center',
+        description: 'Perfect for beginners. Learn the fundamentals of painting and color theory.',
+        image: '/images/courses/foundation.jpg',
+        category: 'painting',
+        price: '$299',
+        duration: '4 weeks',
+        capacity: 12,
+        level: 'beginner'
     }
 ];
 
-function CountdownTimer({ targetDate }: { targetDate: Date }) {
-    const [timeLeft, setTimeLeft] = useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-    });
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate.getTime() - now;
-
-            setTimeLeft({
-                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((distance % (1000 * 60)) / 1000)
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [targetDate]);
-
+function CertificationInfo({ level }: { level: Course['level'] }) {
     return (
-        <div className="flex justify-center space-x-4 bg-gray-100 rounded-lg p-4">
-            {Object.entries(timeLeft).map(([unit, value]) => (
-                <div key={unit} className="text-center">
-                    <div className="text-2xl font-bold">{value}</div>
-                    <div className="text-xs text-gray-500 capitalize">{unit}</div>
-                </div>
-            ))}
+        <div className="bg-gray-50 rounded-lg p-4">
+            <div className="flex items-center justify-center mb-2">
+                <svg className="w-6 h-6 text-gray-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span className="text-gray-700 font-medium">Official Certification</span>
+            </div>
+            <p className="text-sm text-gray-600 text-center">
+                {level === 'beginner' && 'Receive a Foundation Level Certificate upon completion'}
+                {level === 'intermediate' && 'Earn an Advanced Practitioner Certificate'}
+                {level === 'advanced' && 'Obtain a Master Level Certification'}
+            </p>
         </div>
     );
 }
 
-export default function EventsSection() {
+export default function CoursesSection() {
+    const [filters, setFilters] = useState({
+        price: 'all' as PriceRange,
+        sort: 'popular' as SortOption,
+    });
+
+    const handlePriceChange = (range: PriceRange) => {
+        setFilters(prev => ({ ...prev, price: range }));
+    };
+
+    const handleSortChange = (sort: SortOption) => {
+        setFilters(prev => ({ ...prev, sort: sort }));
+    };
+
+    const filteredAndSortedCourses = courses
+        .filter(course => {
+            if (filters.price === 'all') return true;
+            const price = parseInt(course.price.replace('$', ''));
+            switch (filters.price) {
+                case 'under-500': return price < 500;
+                case '500-1000': return price >= 500 && price <= 1000;
+                case '1000-5000': return price > 1000 && price <= 5000;
+                case 'over-5000': return price > 5000;
+                default: return true;
+            }
+        })
+        .sort((a, b) => {
+            switch (filters.sort) {
+                case 'price-low':
+                    return parseInt(a.price.replace('$', '')) - parseInt(b.price.replace('$', ''));
+                case 'price-high':
+                    return parseInt(b.price.replace('$', '')) - parseInt(a.price.replace('$', ''));
+                case 'recent':
+                    return b.date.getTime() - a.date.getTime();
+                default: // 'popular'
+                    return b.capacity - a.capacity;
+            }
+        });
+
     return (
         <section className="py-20 bg-white">
             <div className="container mx-auto px-4">
@@ -97,14 +127,21 @@ export default function EventsSection() {
                     viewport={{ once: true }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl font-bold mb-4">Próximos Eventos</h2>
-                    <p className="text-gray-600">No te pierdas nuestros eventos exclusivos</p>
+                    <h2 className="text-3xl font-bold mb-4">Art Courses</h2>
+                    <p className="text-gray-600">Learn directly from Van Robert and master the art of painting</p>
                 </motion.div>
 
+                <AdvancedFilters
+                    onPriceRangeChange={handlePriceChange}
+                    onSortChange={handleSortChange}
+                    selectedPrice={filters.price}
+                    selectedSort={filters.sort}
+                />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {events.map((event) => (
+                    {filteredAndSortedCourses.map((course) => (
                         <motion.div
-                            key={event.id}
+                            key={course.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -113,38 +150,52 @@ export default function EventsSection() {
                         >
                             <div className="relative h-48">
                                 <Image
-                                    src={event.image}
-                                    alt={event.title}
+                                    src={course.image}
+                                    alt={course.title}
                                     fill
                                     className="object-cover"
                                 />
                                 <div className="absolute top-4 right-4">
-                                    <span className="px-3 py-1 bg-black text-white rounded-full text-sm">
-                                        {event.category}
+                                    <span className={`px-3 py-1 rounded-full text-sm font-medium
+                                        ${course.level === 'beginner' ? 'bg-green-500' :
+                                        course.level === 'intermediate' ? 'bg-yellow-500' :
+                                            'bg-red-500'} text-white`}>
+                                        {course.level}
                                     </span>
                                 </div>
                             </div>
                             <div className="p-6">
-                                <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                                <p className="text-gray-600 mb-4">{event.description}</p>
-                                <div className="flex items-center mb-4">
-                                    <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span className="text-gray-600">{event.location}</span>
+                                <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                                <p className="text-gray-600 mb-4">{course.description}</p>
+
+                                <div className="flex items-center mb-4 text-gray-500">
+                                    <div className="flex items-center mr-6">
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>{course.duration}</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>{course.capacity} spots</span>
+                                    </div>
                                 </div>
+
                                 <div className="mb-4">
-                                    <CountdownTimer targetDate={event.date} />
+                                    <CertificationInfo level={course.level} />
                                 </div>
+
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">{event.price}</span>
+                                    <span className="text-2xl font-bold text-gray-900">{course.price}</span>
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className="px-4 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+                                        className="px-6 py-2 bg-black text-white rounded-full
+                                                 hover:bg-gray-800 transition-all duration-300"
                                     >
-                                        Reservar Lugar
+                                        Enroll Now
                                     </motion.button>
                                 </div>
                             </div>

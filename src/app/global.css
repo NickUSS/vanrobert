@@ -5,12 +5,12 @@
 @layer base {
     :root {
         /* Colores base */
-        --background: 0 0% 100%; /* Blanco */
-        --foreground: 0 0% 0%; /* Negro */
+        --background: 0 0% 100%;
+        --foreground: 0 0% 0%;
 
         /* Colores de sección */
-        --section-light: 0 0% 98%; /* Gris muy claro para secciones alternadas */
-        --section-dark: 0 0% 0%; /* Negro para secciones oscuras */
+        --section-light: 0 0% 98%;
+        --section-dark: 0 0% 0%;
 
         /* Colores de texto */
         --text-primary: 0 0% 0%;
@@ -27,11 +27,6 @@
 
         /* Sombras */
         --shadow: 0 0% 0%;
-
-        /* Colores para el AnnouncementBanner */
-        --particle-color-1: 0 0% 100%; /* Blanco */
-        --particle-color-2: 0 0% 90%;  /* Gris claro */
-        --particle-color-3: 0 0% 80%;  /* Gris medio */
     }
 }
 
@@ -59,9 +54,36 @@
     .btn-secondary {
         @apply border-2 border-black text-black hover:bg-black hover:text-white transition-colors;
     }
+
+    /* Estilos del AnnouncementBanner */
+    .announcement-banner {
+        @apply fixed top-0 left-0 right-0 z-50
+        bg-black text-white shadow-lg
+        transition-all duration-300 ease-in-out;
+    }
+
+    .announcement-content {
+        @apply max-w-7xl mx-auto px-4 py-3
+        flex items-center justify-center
+        relative text-sm sm:text-base;
+    }
+
+    .announcement-link {
+        @apply ml-2 underline hover:text-gray-200
+        inline-flex items-center gap-1
+        transition-colors duration-200;
+    }
+
+    .announcement-close {
+        @apply absolute right-4 top-1/2 -translate-y-1/2
+        p-1 rounded-full
+        hover:bg-white/20
+        transition-colors duration-200
+        focus:outline-none focus:ring-2 focus:ring-white/50;
+    }
 }
 
-/* Animación de rebote para el emoji en el AnnouncementBanner */
+/* Animaciones */
 @keyframes bounce {
     0%, 100% {
         transform: translateY(-25%);
@@ -77,34 +99,77 @@
     animation: bounce 1s infinite;
 }
 
-/* Desactivar animaciones si el usuario prefiere reducir el movimiento */
+/* Accesibilidad - Reducción de movimiento */
 @media (prefers-reduced-motion: reduce) {
     .animate-bounce {
         animation: none;
     }
 }
 
-/* Estilos específicos para el AnnouncementBanner */
-.announcement-banner {
-    @apply fixed top-0 left-0 right-0 z-50 shadow-md;
-    background-color: black;
-    transition: all 0.3s ease-in-out;
+/* Estilos para elementos select personalizados */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
 }
 
-.announcement-link {
-    @apply underline hover:text-gray-300 transition-colors inline-flex items-center;
+select::-ms-expand {
+    display: none;
 }
 
+/* Utilidades adicionales */
 @layer utilities {
     .filter-white {
         filter: brightness(0) invert(1);
     }
 }
 
-.announcement-close {
-    @apply absolute right-4 top-1/2 transform -translate-y-1/2
-    w-6 h-6 flex items-center justify-center
-    hover:bg-white/20 rounded-full transition-all
-    text-xl font-bold focus:outline-none focus:ring-2
-    focus:ring-white/50 active:scale-95;
+.nav-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+.filter-white {
+    filter: brightness(0) invert(1);
+}
+
+/* Transiciones suaves globales */
+* {
+    @apply transition-colors duration-200 ease-in-out;
+}
+
+/* Estilos de scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Estilos de selección de texto */
+::selection {
+    @apply bg-black text-white;
+}
+
+/* Estilos de focus globales */
+:focus-visible {
+    @apply outline-none ring-2 ring-black ring-offset-2;
+}
+
+/* Estilos de scroll personalizados */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
 }
