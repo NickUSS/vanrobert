@@ -131,13 +131,6 @@ export default function CoursesSection() {
                     <p className="text-gray-600">Learn directly from Van Robert and master the art of painting</p>
                 </motion.div>
 
-                <AdvancedFilters
-                    onPriceRangeChange={handlePriceChange}
-                    onSortChange={handleSortChange}
-                    selectedPrice={filters.price}
-                    selectedSort={filters.sort}
-                />
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredAndSortedCourses.map((course) => (
                         <motion.div
