@@ -85,7 +85,7 @@ export default function Footer() {
                                 className="flex items-center space-x-2"
                             >
                                 <span className="font-medium text-white">Studio:</span>
-                                <span>Doral, FL</span>
+                                <span>8249 NW 36st, Doral FL - 33166</span>
                             </motion.li>
                             <motion.li
                                 whileHover={{ x: 5 }}

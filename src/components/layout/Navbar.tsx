@@ -3,7 +3,6 @@ import {useState, useEffect, JSX} from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import AnimatedButton from '../buttons/AnimatedButton'
 
 // Iconos SVG
 const Icons = {
@@ -73,7 +72,6 @@ const Icons = {
             <path d="M9 21V9"/>
         </svg>
     ),
-
     FashionEvents: ({ className }: { className?: string }) => (
         <svg
             className={className}
@@ -215,31 +213,11 @@ interface NavItem {
     href: string;
     submenu?: SubMenuItem[];
 }
-
-interface DesktopNavItemProps {
-    item: NavItem;
-    isScrolled: boolean;
-    index: number;
-}
-
-// Variantes de animación
-const itemVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: (i: number) => ({
-        opacity: 1,
-        x: 0,
-        transition: {
-            delay: i * 0.1,
-            type: "spring",
-            stiffness: 100
-        }
-    })
-};
-
+// Datos de navegación
 const navItems: NavItem[] = [
     {
         name: 'Art',
-        href: '/art',
+        href: '',
         submenu: [
             {
                 name: 'Courses',
@@ -265,11 +243,11 @@ const navItems: NavItem[] = [
                 href: '/art/exhibitions',
                 Icon: Icons.Exhibitions
             }
-        ]
+        ],
     },
     {
         name: 'Fashion',
-        href: '/fashion',
+        href: '',
         submenu: [
             {
                 name: 'Fashion Events',
@@ -293,7 +271,7 @@ const navItems: NavItem[] = [
     },
     {
         name: 'Shop',
-        href: '/shop',
+        href: '',
         submenu: [
             {
                 name: 'New Arrivals',
@@ -322,92 +300,10 @@ const navItems: NavItem[] = [
         ]
     }
 ];
-
-const DesktopNavItem = ({ item, isScrolled, index }: DesktopNavItemProps) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-        <motion.div
-            key={item.name}
-            custom={index}
-            variants={itemVariants}
-            onHoverStart={() => setIsOpen(true)}
-            onHoverEnd={() => setIsOpen(false)}
-            className="relative"
-        >
-            <Link
-                href={item.href}
-                className={`relative px-4 py-2 transition-all duration-300 
-                ${isScrolled
-                    ? 'text-gray-800 hover:text-black hover:text-glow-dark'
-                    : 'text-white hover:text-white hover:text-glow-light'
-                }`}
-            >
-                {item.name}
-                {item.submenu && (
-                    <span className="ml-1">▾</span>
-                )}
-            </Link>
-
-            {/* Submenu */}
-            <AnimatePresence>
-                {isOpen && item.submenu && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className={`absolute left-0 mt-2 w-80 rounded-xl overflow-hidden shadow-lg
-                                  ${isScrolled ? 'bg-white' : 'bg-black/90 backdrop-blur-md'}
-                                  border border-white/10`}
-                    >
-                        <div className="p-2">
-                            {item.submenu.map((subItem, idx) => (
-                                <motion.div
-                                    key={subItem.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                >
-                                    <Link
-                                        href={subItem.href}
-                                        className={`block p-3 rounded-lg transition-all duration-200
-                                                  ${isScrolled
-                                            ? 'hover:bg-gray-100 text-gray-800'
-                                            : 'hover:bg-white/10 text-white'
-                                        } group`}
-                                    >
-                                        <div className="flex items-center">
-                                            <div className="mr-3 flex-shrink-0">
-                                                <subItem.Icon className={`w-6 h-6 ${
-                                                    isScrolled
-                                                        ? 'text-gray-800 group-hover:text-black'
-                                                        : 'text-white group-hover:text-white/90'
-                                                }`} />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium">{subItem.name}</p>
-                                                <p className={`text-sm ${
-                                                    isScrolled ? 'text-gray-500' : 'text-gray-300'
-                                                }`}>
-                                                    {subItem.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
-    );
-};
-
 export default function Navbar() {
-    const [isScrolled, setIsScrolled] = useState(false)
+    const [, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [activeItem, setActiveItem] = useState('')
 
     useEffect(() => {
         const handleScroll = () => {
@@ -417,229 +313,299 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
-    const navVariants = {
-        hidden: { y: -100, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 20
-            }
-        }
+    const handleMouseEnter = (itemName: string) => {
+        setActiveItem(itemName)
+    }
+
+    const handleMouseLeave = () => {
+        setActiveItem('')
     }
 
     return (
         <motion.nav
-            initial="hidden"
-            animate="visible"
-            variants={navVariants}
-            className="fixed w-full z-50 nav-transition top-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed w-full z-50 bg-black"
         >
-            <div className={`w-full transition-all duration-300 ${
-                isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : ''
-            }`}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-24">
-                        {/* Logo */}
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="w-[200px]"
-                        >
-                            <Link href="/" className="flex items-center">
-                                <div className="relative w-[200px] h-[80px]">
-                                    <Image
-                                        src="/images/logo.png"
-                                        alt="Logo"
-                                        fill
-                                        priority
-                                        sizes="200px"
-                                        className={`object-contain transition-all duration-300 
-                                        ${isScrolled ? 'brightness-90' : 'brightness-100 filter-white'}`}
-                                    />
-                                </div>
-                            </Link>
-                        </motion.div>
-
-                        {/* Desktop Navigation */}
-                        <div className="hidden md:flex flex-1 justify-center items-center">
-                            <div className={`flex flex-row items-center space-x-8 transition-all duration-300 ${
-                                !isScrolled ? 'bg-black/20 backdrop-blur-sm rounded-full px-6 py-2' : ''
-                            }`}>
-                                {navItems.map((item, index) => (
-                                    <DesktopNavItem
-                                        key={item.name}
-                                        item={item}
-                                        isScrolled={isScrolled}
-                                        index={index}
-                                    />
-                                ))}
-                            </div>
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="flex justify-between items-center h-24"> {/* Altura aumentada */}
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center">
+                        <div className="relative w-[200px] h-[70px]"> {/* Tamaño aumentado */}
+                            <Image
+                                src="/images/logo.png"
+                                alt="Logo"
+                                fill
+                                priority
+                                sizes="200px"
+                                className="object-contain"
+                                style={{
+                                    filter: 'brightness(1) sepia(1) saturate(10000%) hue-rotate(0deg)',
+                                    transform: 'scale(1.2)' // Escala aumentada
+                                }}
+                            />
                         </div>
+                    </Link>
 
-                        {/* Authentication Buttons */}
-                        <div className="hidden md:flex items-center gap-2 w-[200px] justify-end">
-                            <AnimatedButton
-                                variant="secondary"
-                                className={`inline-flex items-center justify-center whitespace-nowrap ${
-                                    isScrolled
-                                        ? 'border-black text-black hover:bg-black hover:text-white'
-                                        : 'border-white text-white hover:bg-white/20'
-                                } backdrop-blur-sm text-sm px-4 py-2 rounded-full`}
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center space-x-16"> {/* Espaciado aumentado */}
+                        {navItems.map((item) => (
+                            <div
+                                key={item.name}
+                                className="relative group"
+                                onMouseEnter={() => handleMouseEnter(item.name)}
+                                onMouseLeave={handleMouseLeave}
                             >
-                                Sign In
-                            </AnimatedButton>
-                            <AnimatedButton
-                                variant="primary"
-                                className={`inline-flex items-center justify-center whitespace-nowrap ${
-                                    isScrolled
-                                        ? 'bg-black text-white hover:bg-gray-800'
-                                        : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
-                                } text-sm px-4 py-2 rounded-full`}
-                            >
-                                Sign Up
-                            </AnimatedButton>
-                        </div>
-
-                        {/* Mobile Menu Button */}
-                        <div className="md:hidden">
-                            <motion.button
-                                whileTap={{ scale: 0.9 }}
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className={`p-2 rounded-lg ${
-                                    isScrolled
-                                        ? 'hover:bg-gray-100'
-                                        : 'bg-black/20 backdrop-blur-sm hover:bg-white/10'
-                                }`}
-                                aria-label="Menu"
-                            >
-                                <svg
-                                    className={`w-6 h-6 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                <Link
+                                    href={item.href}
+                                    className="text-white text-lg tracking-wider font-medium
+                                             hover:text-white/80 transition-all duration-200
+                                             px-1 py-2 inline-flex items-center hover:text-glow-light"
                                 >
-                                    {isMobileMenuOpen ? (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    ) : (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M4 6h16M4 12h16M4 18h16"
-                                        />
+                                    {item.name}
+                                    {item.submenu && (
+                                        <svg
+                                            className="w-5 h-5 ml-1 transition-transform duration-200
+                                                     group-hover:rotate-180"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
                                     )}
-                                </svg>
-                            </motion.button>
-                        </div>
+                                </Link>
+
+                                {/* Submenu */}
+                                <AnimatePresence>
+                                    {item.submenu && activeItem === item.name && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 10 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute left-0 mt-2 w-96 bg-black/95
+                                                     backdrop-blur-md rounded-xl shadow-xl
+                                                     border border-white/10 overflow-hidden"
+                                        >
+                                            <div className="p-3">
+                                                {item.submenu.map((subItem) => (
+                                                    <Link
+                                                        key={subItem.name}
+                                                        href={subItem.href}
+                                                        className="block p-3 rounded-lg text-white/80
+                                                                 hover:bg-white/10 group transition-all"
+                                                    >
+                                                        <div className="flex items-center">
+                                                            <subItem.Icon
+                                                                className="w-6 h-6 mr-4 text-white/60
+                                                                         group-hover:text-white
+                                                                         transition-colors"
+                                                            />
+                                                            <div>
+                                                                <p className="text-base font-medium text-white
+                                                                          group-hover:text-glow-light">
+                                                                    {subItem.name}
+                                                                </p>
+                                                                <p className="text-sm text-white/60
+                                                                          group-hover:text-white/80">
+                                                                    {subItem.description}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Auth Buttons */}
+                    <div className="hidden md:flex items-center gap-6"> {/* Espaciado aumentado */}
+                        <button className="text-white text-lg tracking-wide hover:text-white/80
+                                         transition-all duration-200 px-4 py-2 hover:text-glow-light">
+                            Sign In
+                        </button>
+                        <button className="bg-white text-black text-lg tracking-wide px-6 py-2
+                                         rounded-full hover:bg-white/90 transition-all duration-200
+                                         hover:shadow-lg transform hover:-translate-y-0.5">
+                            Sign Up
+                        </button>
+                    </div>
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                            aria-label="Menu"
+                        >
+                            <svg
+                                className="w-8 h-8 text-white" // Tamaño aumentado
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                {isMobileMenuOpen ? (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                ) : (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                )}
+                            </svg>
+                        </motion.button>
                     </div>
                 </div>
+            </div>
 
-                {/* Mobile Menu */}
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{
-                                opacity: 1,
-                                height: 'auto',
-                                transition: {
-                                    height: {
-                                        type: "spring",
-                                        stiffness: 100,
-                                        damping: 20
-                                    }
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{
+                            opacity: 1,
+                            height: 'auto',
+                            transition: {
+                                height: {
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 20
                                 }
-                            }}
-                            exit={{
-                                opacity: 0,
-                                height: 0,
-                                transition: {
-                                    opacity: { duration: 0.2 },
-                                    height: { duration: 0.3 }
-                                }
-                            }}
-                            className={`md:hidden w-full ${
-                                isScrolled
-                                    ? 'bg-white/95 backdrop-blur-md border-t'
-                                    : 'bg-black/80 backdrop-blur-md'
-                            }`}
-                        >
-                            <div className="px-4 py-6 space-y-3">
-                                {navItems.map((item) => (
-                                    <div key={item.name}>
+                            }
+                        }}
+                        exit={{
+                            opacity: 0,
+                            height: 0,
+                            transition: {
+                                opacity: { duration: 0.2 },
+                                height: { duration: 0.3 }
+                            }
+                        }}
+                        className="md:hidden w-full bg-black border-t border-white/10"
+                    >
+                        <div className="px-4 py-6 space-y-4">
+                            {navItems.map((item) => (
+                                <div key={item.name} className="space-y-2">
+                                    <div
+                                        className="flex items-center justify-between"
+                                        onClick={() => {
+                                            if (activeItem === item.name) {
+                                                setActiveItem('')
+                                            } else {
+                                                setActiveItem(item.name)
+                                            }
+                                        }}
+                                    >
                                         <Link
                                             href={item.href}
-                                            className={`block px-4 py-2 rounded-lg transition-colors ${
-                                                isScrolled
-                                                    ? 'text-gray-800 hover:bg-gray-100'
-                                                    : 'text-white hover:bg-white/10'
-                                            }`}
+                                            className="text-white text-lg tracking-wide hover:text-white/80
+                                                     transition-all duration-200 py-2 hover:text-glow-light"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >
                                             {item.name}
                                         </Link>
                                         {item.submenu && (
-                                            <div className="pl-4 mt-2 space-y-2">
+                                            <button className="p-2 hover:bg-white/10 rounded-lg
+                                                           transition-colors">
+                                                <svg
+                                                    className={`w-6 h-6 text-white/80 transition-transform duration-200
+                                                              ${activeItem === item.name ? 'rotate-180' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Mobile Submenu */}
+                                    <AnimatePresence>
+                                        {item.submenu && activeItem === item.name && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="pl-4 space-y-2"
+                                            >
                                                 {item.submenu.map((subItem) => (
                                                     <Link
                                                         key={subItem.name}
                                                         href={subItem.href}
-                                                        className={`block px-4 py-2 rounded-lg text-sm ${
-                                                            isScrolled
-                                                                ? 'text-gray-600 hover:bg-gray-100'
-                                                                : 'text-gray-300 hover:bg-white/10'
-                                                        } group`}
+                                                        className="flex items-center p-3 rounded-lg
+                                                                 text-white/80 hover:bg-white/10
+                                                                 transition-all duration-200 group"
                                                         onClick={() => setIsMobileMenuOpen(false)}
                                                     >
-                                                        <div className="flex items-center">
-                                                            <subItem.Icon className={`w-5 h-5 mr-2 ${
-                                                                isScrolled
-                                                                    ? 'text-gray-600 group-hover:text-gray-900'
-                                                                    : 'text-gray-300 group-hover:text-white'
-                                                            }`} />
-                                                            {subItem.name}
+                                                        <subItem.Icon
+                                                            className="w-6 h-6 mr-4 text-white/60
+                                                                     group-hover:text-white"
+                                                        />
+                                                        <div>
+                                                            <p className="text-base font-medium text-white
+                                                                       group-hover:text-glow-light">
+                                                                {subItem.name}
+                                                            </p>
+                                                            <p className="text-sm text-white/60
+                                                                       group-hover:text-white/80">
+                                                                {subItem.description}
+                                                            </p>
                                                         </div>
                                                     </Link>
                                                 ))}
-                                            </div>
+                                            </motion.div>
                                         )}
-                                    </div>
-                                ))}
-                                <div className="space-y-2 pt-4">
-                                    <AnimatedButton
-                                        variant="secondary"
-                                        className={`w-full ${
-                                            isScrolled
-                                                ? 'border-black text-black hover:bg-black hover:text-white'
-                                                : 'border-white text-white hover:bg-white/20'
-                                        }`}
-                                    >
-                                        Sign In
-                                    </AnimatedButton>
-                                    <AnimatedButton
-                                        variant="primary"
-                                        className={`w-full ${
-                                            isScrolled
-                                                ? 'bg-black text-white hover:bg-gray-800'
-                                                : 'bg-white/20 text-white hover:bg-white/30'
-                                        }`}
-                                    >
-                                        Sign Up
-                                    </AnimatedButton>
+                                    </AnimatePresence>
                                 </div>
+                            ))}
+
+                            {/* Mobile Auth Buttons */}
+                            <div className="pt-4 space-y-3">
+                                <button
+                                    className="w-full px-6 py-3 text-lg text-white tracking-wide
+                                             border border-white/20 rounded-lg
+                                             hover:bg-white/10 transition-all duration-200
+                                             hover:text-glow-light"
+                                >
+                                    Sign In
+                                </button>
+                                <button
+                                    className="w-full px-6 py-3 text-lg text-black tracking-wide
+                                             bg-white rounded-lg hover:bg-white/90
+                                             transition-all duration-200 font-medium"
+                                >
+                                    Sign Up
+                                </button>
                             </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.nav>
     )
 }
