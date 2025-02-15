@@ -6,45 +6,73 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section con un diseño más artístico */}
-            <div className="relative h-[80vh] bg-black overflow-hidden">
-                <Image
-                    src="/images/about.jpg"
-                    alt="Van Robert - Contemporary Artist"
-                    fill
-                    className="object-cover object-center"
-                    priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+            <div className="relative min-h-screen bg-black">
+                {/* Fondo artístico abstracto */}
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-purple-500/20 to-pink-500/20 opacity-60" />
 
-                {/* Elementos decorativos abstractos */}
+                {/* Contenedor principal */}
+                <div className="relative max-w-7xl mx-auto px-4 py-20 min-h-screen flex flex-col md:flex-row items-center justify-center gap-12">
+                    {/* Contenedor de la imagen */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="relative w-full max-w-md rounded-2xl overflow-hidden shadow-2xl"
+                    >
+                        <Image
+                            src="/images/about.jpg"
+                            alt="Van Robert - Contemporary Artist"
+                            width={500}
+                            height={700}
+                            className="object-cover"
+                            priority
+                            quality={100}
+                        />
+                        {/* Overlay sutil */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    </motion.div>
+
+                    {/* Contenido de texto */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="text-white max-w-xl text-center md:text-left"
+                    >
+                        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+                            Van Robert
+                        </h1>
+                        <p className="text-xl md:text-2xl text-white/90 mb-8">
+                            Contemporary Artist & Fashion Innovator
+                        </p>
+                        <p className="text-lg text-white/80 mb-8">
+                            Bridging the gap between classical artistry and modern expression,
+                            creating pieces that challenge conventional boundaries while celebrating
+                            the beauty of diversity in art.
+                        </p>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-white text-black px-8 py-3 rounded-full
+                                     hover:bg-gray-100 transition-all duration-300
+                                     font-medium text-lg"
+                        >
+                            Explore My Work
+                        </motion.button>
+                    </motion.div>
+                </div>
+
+                {/* Elemento decorativo - líneas artísticas */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                    className="absolute inset-0 mix-blend-overlay"
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
                     style={{
-                        background: 'radial-gradient(circle at 30% 40%, rgba(255, 198, 0, 0.3), transparent 60%), radial-gradient(circle at 70% 60%, rgba(255, 82, 182, 0.3), transparent 60%)'
+                        background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.1) 50%, transparent)',
+                        maskImage: 'linear-gradient(to top, white, transparent)'
                     }}
                 />
-
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-center">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="text-5xl md:text-7xl font-bold text-white mb-4"
-                    >
-                        Van Robert
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-xl md:text-2xl text-white/90"
-                    >
-                        Contemporary Artist & Fashion Innovator
-                    </motion.p>
-                </div>
             </div>
 
             {/* Content Section */}
@@ -76,7 +104,6 @@ export default function AboutPage() {
                         </p>
                         <p className="text-gray-500 italic">- Van Robert</p>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
                         <div>
                             <h3 className="text-2xl font-semibold mb-4">Background & Influence</h3>
@@ -123,6 +150,46 @@ export default function AboutPage() {
                             <h4 className="text-3xl font-bold mb-2">500+</h4>
                             <p className="text-white/90">Unique Creations</p>
                         </motion.div>
+                    </div>
+
+                    <div className="my-12">
+                        <h3 className="text-2xl font-semibold mb-4">Recognition & Achievements</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                className="p-6 bg-gray-50 rounded-xl"
+                            >
+                                <h4 className="font-semibold mb-2">International Recognition</h4>
+                                <ul className="list-disc list-inside text-gray-700">
+                                    <li>Featured Artist at Paris Fashion Week</li>
+                                    <li>New York Art Critics Circle Award</li>
+                                    <li>Global Innovator in Arts Award</li>
+                                </ul>
+                            </motion.div>
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                className="p-6 bg-gray-50 rounded-xl"
+                            >
+                                <h4 className="font-semibold mb-2">Notable Collaborations</h4>
+                                <ul className="list-disc list-inside text-gray-700">
+                                    <li>Major Fashion Houses</li>
+                                    <li>Contemporary Museums</li>
+                                    <li>International Art Foundations</li>
+                                </ul>
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Studio Section */}
+                    <div className="my-12">
+                        <h3 className="text-2xl font-semibold mb-4">The Creative Process</h3>
+                        <p className="text-gray-700 mb-6">
+                            In his studio, Van Robert combines traditional techniques with innovative
+                            approaches to create unique pieces that speak to both the past and future
+                            of artistic expression. Each work is carefully crafted through a process
+                            that can take months, ensuring that every detail contributes to the
+                            overall vision.
+                        </p>
                     </div>
 
                     {/* Contact Section con estilo actualizado */}

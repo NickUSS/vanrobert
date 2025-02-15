@@ -339,8 +339,8 @@ const DesktopNavItem = ({ item, isScrolled, index }: DesktopNavItemProps) => {
                 href={item.href}
                 className={`relative px-4 py-2 transition-all duration-300 
                 ${isScrolled
-                    ? 'text-gray-800 hover:text-black'
-                    : 'text-white hover:text-white/80'
+                    ? 'text-gray-800 hover:text-black hover:text-glow-dark'
+                    : 'text-white hover:text-white hover:text-glow-light'
                 }`}
             >
                 {item.name}

@@ -8,21 +8,21 @@ const testimonials = [
         name: 'Emma Thompson',
         role: 'Art Collector',
         content: 'Van Robert unique vision and artistic excellence have made each piece in my collection truly special. His attention to detail and innovative approach to art is remarkable.',
-        image: '/images/14.jpeg',
+        image: '/images/14.jpg',
         rating: 5
     },
     {
         name: 'James Wilson',
         role: 'Fashion Enthusiast',
         content: 'The fusion of art and fashion in Van Robert work is extraordinary. Each piece tells a story and brings a unique perspective to contemporary design.',
-        image: '/images/15.jpeg',
+        image: '/images/15.jpg',
         rating: 5
     },
     {
         name: 'Sarah Mitchell',
         role: 'Gallery Owner',
         content: 'Working with Van Robert has been an incredible journey. His pieces consistently captivate our visitors and bring a fresh perspective to our collection.',
-        image: '/images/13.jpeg',
+        image: '/images/13.jpg',
         rating: 5
     },
 ];

@@ -122,6 +122,20 @@ select::-ms-expand {
     display: none;
 }
 
+@layer utilities {
+    .text-glow-light {
+        text-shadow: 0 0 5px rgba(255,255,255,0.5),
+        0 0 10px rgba(255,255,255,0.3),
+        0 0 15px rgba(255,255,255,0.2);
+    }
+
+    .text-glow-dark {
+        text-shadow: 0 0 5px rgba(0,0,0,0.5),
+        0 0 10px rgba(0,0,0,0.3),
+        0 0 15px rgba(0,0,0,0.2);
+    }
+}
+
 /* Utilidades adicionales */
 @layer utilities {
     .filter-white {

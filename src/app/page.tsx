@@ -12,7 +12,6 @@ import Stats from '@/components/home/Stats';
 import AdvancedFilters from '@/components/filters/AdvancedFilters';
 import CustomCursor from '@/components/common/CustomCursor';
 import { PriceRange, SortOption } from '@/types/art';
-import { Navbar } from "@/components/layout";
 
 interface FilterState {
     price: PriceRange;
@@ -23,7 +22,7 @@ interface FilterState {
 
 const GALLERY_IMAGES = [2, 3, 4].map(num => ({
     id: num,
-    src: `/images/${num}.jpeg`,
+    src: `/images/${num}.jpg`,
     title: `Artwork ${num}`,
     category: 'artwork',
     price: Math.floor(Math.random() * 1000) + 500
@@ -119,9 +118,6 @@ export default function HomePage() {
                 )}
             </AnimatePresence>
 
-            {/* Navbar */}
-            <Navbar showAnnouncement={showAnnouncement}/>
-
             {/* Main Content - Eliminado el padding superior */}
             <motion.div
                 initial={{opacity: 0}}
@@ -162,7 +158,7 @@ const HeroSection = () => (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
             <Image
-                src="/images/1.jpeg"
+                src="/images/1.jpg"
                 alt="Hero background"
                 fill
                 priority

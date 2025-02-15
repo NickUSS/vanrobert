@@ -12,37 +12,37 @@ interface InstagramPost {
 const instagramPosts: InstagramPost[] = [
     {
         id: '1',
-        imageUrl: '/images/8.jpeg',
+        imageUrl: '/images/8.jpg',
         caption: 'Latest Art Collection',
         category: 'art'
     },
     {
         id: '2',
-        imageUrl: '/images/9.jpeg',
+        imageUrl: '/images/9.jpg',
         caption: 'Fashion Design Process',
         category: 'fashion'
     },
     {
         id: '3',
-        imageUrl: '/images/10.jpeg',
+        imageUrl: '/images/10.jpg',
         caption: 'Studio Session',
         category: 'art'
     },
     {
         id: '4',
-        imageUrl: '/images/11.jpeg',
+        imageUrl: '/images/11.jpg',
         caption: 'New Collection Preview',
         category: 'fashion'
     },
     {
         id: '5',
-        imageUrl: '/images/12.jpeg',
+        imageUrl: '/images/12.jpg',
         caption: 'Design Inspiration',
         category: 'design'
     },
     {
         id: '6',
-        imageUrl: '/images/13.jpeg',
+        imageUrl: '/images/13.jpg',
         caption: 'Behind the Scenes',
         category: 'art'
     }
