@@ -300,8 +300,9 @@ const navItems: NavItem[] = [
         ]
     }
 ];
+
 export default function Navbar() {
-    const [, setIsScrolled] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [activeItem, setActiveItem] = useState('')
 
@@ -325,13 +326,18 @@ export default function Navbar() {
         <motion.nav
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed w-full z-50 bg-black"
+            className={`fixed w-full z-50 transition-all duration-300 ${
+                isScrolled ? 'bg-black/95 backdrop-blur-md' : 'bg-black'
+            }`}
         >
             <div className="max-w-7xl mx-auto px-6">
-                <div className="flex justify-between items-center h-24"> {/* Altura aumentada */}
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center">
-                        <div className="relative w-[200px] h-[70px]"> {/* Tamaño aumentado */}
+                <div className="flex justify-between items-center h-24">
+                    {/* Logo con efecto hover */}
+                    <Link
+                        href="/"
+                        className="flex items-center transform transition-transform duration-300 hover:scale-105"
+                    >
+                        <div className="relative w-[200px] h-[70px]">
                             <Image
                                 src="/images/logo.png"
                                 alt="Logo"
@@ -341,115 +347,110 @@ export default function Navbar() {
                                 className="object-contain"
                                 style={{
                                     filter: 'brightness(1) sepia(1) saturate(10000%) hue-rotate(0deg)',
-                                    transform: 'scale(1.2)' // Escala aumentada
+                                    transform: 'scale(1.2)'
                                 }}
                             />
                         </div>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-16"> {/* Espaciado aumentado */}
-                        {navItems.map((item) => (
-                            <div
-                                key={item.name}
-                                className="relative group"
-                                onMouseEnter={() => handleMouseEnter(item.name)}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <Link
-                                    href={item.href}
-                                    className="text-white text-lg tracking-wider font-medium
-                                             hover:text-white/80 transition-all duration-200
-                                             px-1 py-2 inline-flex items-center hover:text-glow-light"
+                    {/* Desktop Navigation - Centrado y mejorado */}
+                    <div className="hidden md:flex items-center justify-center flex-grow">
+                        <div className="flex items-center space-x-20">
+                            {navItems.map((item) => (
+                                <div
+                                    key={item.name}
+                                    className="relative group"
+                                    onMouseEnter={() => handleMouseEnter(item.name)}
+                                    onMouseLeave={handleMouseLeave}
                                 >
-                                    {item.name}
-                                    {item.submenu && (
-                                        <svg
-                                            className="w-5 h-5 ml-1 transition-transform duration-200
-                                                     group-hover:rotate-180"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M19 9l-7 7-7-7"
-                                            />
-                                        </svg>
-                                    )}
-                                </Link>
+                                    <Link
+                                        href={item.href}
+                                        className="text-white text-lg tracking-wider font-medium
+                                                 hover:text-white/80 transition-all duration-200
+                                                 px-3 py-2 rounded-full inline-flex items-center
+                                                 hover:text-glow-light hover:bg-white/5"
+                                    >
+                                        {item.name}
+                                        {item.submenu && (
+                                            <svg
+                                                className="w-5 h-5 ml-1 transition-transform duration-200
+                                                         group-hover:rotate-180"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M19 9l-7 7-7-7"
+                                                />
+                                            </svg>
+                                        )}
+                                    </Link>
 
-                                {/* Submenu */}
-                                <AnimatePresence>
-                                    {item.submenu && activeItem === item.name && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 10 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute left-0 mt-2 w-96 bg-black/95
-                                                     backdrop-blur-md rounded-xl shadow-xl
-                                                     border border-white/10 overflow-hidden"
-                                        >
-                                            <div className="p-3">
-                                                {item.submenu.map((subItem) => (
-                                                    <Link
-                                                        key={subItem.name}
-                                                        href={subItem.href}
-                                                        className="block p-3 rounded-lg text-white/80
-                                                                 hover:bg-white/10 group transition-all"
-                                                    >
-                                                        <div className="flex items-center">
-                                                            <subItem.Icon
-                                                                className="w-6 h-6 mr-4 text-white/60
-                                                                         group-hover:text-white
-                                                                         transition-colors"
-                                                            />
-                                                            <div>
-                                                                <p className="text-base font-medium text-white
-                                                                          group-hover:text-glow-light">
-                                                                    {subItem.name}
-                                                                </p>
-                                                                <p className="text-sm text-white/60
-                                                                          group-hover:text-white/80">
-                                                                    {subItem.description}
-                                                                </p>
+                                    {/* Submenu mejorado */}
+                                    <AnimatePresence>
+                                        {item.submenu && activeItem === item.name && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-96
+                                                         bg-black/95 backdrop-blur-md rounded-xl shadow-xl
+                                                         border border-white/10 overflow-hidden
+                                                         shadow-[0_0_30px_rgba(0,0,0,0.3)]"
+                                            >
+                                                <div className="p-3">
+                                                    {item.submenu.map((subItem) => (
+                                                        <Link
+                                                            key={subItem.name}
+                                                            href={subItem.href}
+                                                            className="block p-3 rounded-lg text-white/80
+                                                                     hover:bg-white/10 group transition-all
+                                                                     hover:scale-[1.02] transform"
+                                                        >
+                                                            <div className="flex items-center">
+                                                                <subItem.Icon
+                                                                    className="w-6 h-6 mr-4 text-white/60
+                                                                             group-hover:text-white
+                                                                             transition-colors"
+                                                                />
+                                                                <div>
+                                                                    <p className="text-base font-medium text-white
+                                                                              group-hover:text-glow-light">
+                                                                        {subItem.name}
+                                                                    </p>
+                                                                    <p className="text-sm text-white/60
+                                                                              group-hover:text-white/80">
+                                                                        {subItem.description}
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        ))}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* Auth Buttons */}
-                    <div className="hidden md:flex items-center gap-6"> {/* Espaciado aumentado */}
-                        <button className="text-white text-lg tracking-wide hover:text-white/80
-                                         transition-all duration-200 px-4 py-2 hover:text-glow-light">
-                            Sign In
-                        </button>
-                        <button className="bg-white text-black text-lg tracking-wide px-6 py-2
-                                         rounded-full hover:bg-white/90 transition-all duration-200
-                                         hover:shadow-lg transform hover:-translate-y-0.5">
-                            Sign Up
-                        </button>
-                    </div>
-                    {/* Mobile Menu Button */}
+                    {/* Mobile Menu Button - Mejorado */}
                     <div className="md:hidden">
                         <motion.button
+                            whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                            className="p-2 rounded-lg hover:bg-white/10 transition-colors
+                                     border border-white/20"
                             aria-label="Menu"
                         >
                             <svg
-                                className="w-8 h-8 text-white" // Tamaño aumentado
+                                className="w-8 h-8 text-white"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -475,7 +476,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - Mejorado */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -499,7 +500,8 @@ export default function Navbar() {
                                 height: { duration: 0.3 }
                             }
                         }}
-                        className="md:hidden w-full bg-black border-t border-white/10"
+                        className="md:hidden w-full bg-black/95 backdrop-blur-md
+                                 border-t border-white/10 shadow-lg"
                     >
                         <div className="px-4 py-6 space-y-4">
                             {navItems.map((item) => (
@@ -516,8 +518,9 @@ export default function Navbar() {
                                     >
                                         <Link
                                             href={item.href}
-                                            className="text-white text-lg tracking-wide hover:text-white/80
-                                                     transition-all duration-200 py-2 hover:text-glow-light"
+                                            className="text-white text-lg tracking-wide
+                                                     hover:text-white/80 transition-all duration-200
+                                                     py-2 hover:text-glow-light flex-grow"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >
                                             {item.name}
@@ -543,7 +546,6 @@ export default function Navbar() {
                                         )}
                                     </div>
 
-                                    {/* Mobile Submenu */}
                                     <AnimatePresence>
                                         {item.submenu && activeItem === item.name && (
                                             <motion.div
@@ -583,25 +585,6 @@ export default function Navbar() {
                                     </AnimatePresence>
                                 </div>
                             ))}
-
-                            {/* Mobile Auth Buttons */}
-                            <div className="pt-4 space-y-3">
-                                <button
-                                    className="w-full px-6 py-3 text-lg text-white tracking-wide
-                                             border border-white/20 rounded-lg
-                                             hover:bg-white/10 transition-all duration-200
-                                             hover:text-glow-light"
-                                >
-                                    Sign In
-                                </button>
-                                <button
-                                    className="w-full px-6 py-3 text-lg text-black tracking-wide
-                                             bg-white rounded-lg hover:bg-white/90
-                                             transition-all duration-200 font-medium"
-                                >
-                                    Sign Up
-                                </button>
-                            </div>
                         </div>
                     </motion.div>
                 )}
