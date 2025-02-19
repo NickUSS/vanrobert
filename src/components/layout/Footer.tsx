@@ -41,7 +41,7 @@ export default function Footer() {
                         </motion.div>
                         <p className="text-gray-400 leading-relaxed">
                             Discover the unique fusion of art and fashion through
-                            Van Robert's distinctive vision and creative expression.
+                            Van Robert&#39;s distinctive vision and creative expression.
                         </p>
                     </div>
 

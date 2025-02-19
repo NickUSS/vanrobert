@@ -1,7 +1,8 @@
 import './global.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import {Footer, Navbar} from "@/components/layout";
+import { Footer, Navbar } from "@/components/layout"
+import { CartProvider } from '@/context/CartContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,9 +19,11 @@ export default function RootLayout({
     return (
         <html lang="es" className="scroll-smooth">
         <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <CartProvider>
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+        </CartProvider>
         </body>
         </html>
     )

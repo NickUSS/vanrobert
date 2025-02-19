@@ -13,7 +13,7 @@ export default function SuccessPage() {
             clearCart()
         }, 0)
         return () => clearTimeout(timer)
-    }, []) // Removido clearCart de las dependencias
+    }, [clearCart])
 
     return (
         <div className="min-h-screen pt-24 bg-gradient-to-b from-black to-gray-900 text-white">

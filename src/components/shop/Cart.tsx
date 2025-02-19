@@ -10,17 +10,33 @@ interface CartProps {
     onClose: () => void;
 }
 
+export interface CartItem {
+    id: string;
+    title: string;
+    price: number;
+    image: string;
+    frame?: string;
+    quantity: number;
+}
+
 export default function Cart({ isOpen, onClose }: CartProps) {
-    const { items, removeItem, updateQuantity, total, clearCart } = useCart()
+    const { items, removeItem, updateQuantity, total } = useCart()
     const { createCheckoutSession } = useCheckout()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+
+    const formatPrice = (price: number) => {
+        return price.toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        })
+    }
 
     const handleCheckout = async () => {
         try {
             setIsLoading(true)
             setError(null)
-            await createCheckoutSession(items)
+            await createCheckoutSession(items as CartItem[])
         } catch (err) {
             setError('An error occurred during checkout. Please try again.')
             console.error('Checkout error:', err)
@@ -133,7 +149,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                             </div>
                                             <div className="text-right">
                                                 <p className="font-medium">
-                                                    ${(item.price * item.quantity).toFixed(2)}
+                                                    ${formatPrice(item.price * item.quantity)}
                                                 </p>
                                             </div>
                                         </motion.div>
@@ -147,7 +163,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                             <div className="border-t p-6 space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600">Subtotal</span>
-                                    <span className="font-medium">${total.toFixed(2)}</span>
+                                    <span className="font-medium">${formatPrice(total)}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600">Shipping</span>
@@ -155,7 +171,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                 </div>
                                 <div className="flex justify-between items-center text-lg font-bold">
                                     <span>Total</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <span>${formatPrice(total)}</span>
                                 </div>
 
                                 {error && (

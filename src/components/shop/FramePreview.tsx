@@ -1,15 +1,12 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import {Artwork} from "@/types/artwork";
 
 interface FramePreviewProps {
     isOpen: boolean;
     onClose: () => void;
-    artwork: {
-        id: string;
-        image: string;
-        title: string;
-    };
+    artwork: Artwork;
     onFrameSelect: (frame: string) => void;
 }
 

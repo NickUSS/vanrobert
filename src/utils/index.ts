@@ -26,7 +26,7 @@ export const generateId = () => {
     return Math.random().toString(36).substr(2, 9);
 };
 
-export const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: never[]) => never>(
     func: T,
     wait: number
 ) => {
@@ -43,7 +43,7 @@ export const debounce = <T extends (...args: any[]) => any>(
     };
 };
 
-export const throttle = <T extends (...args: any[]) => any>(
+export const throttle = <T extends (...args: never[]) => never>(
     func: T,
     limit: number
 ) => {

@@ -83,7 +83,7 @@ export default function AboutPage() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="prose prose-lg max-w-none"
                 >
-                    <h2 className="text-3xl font-bold mb-6">The Artist's Vision</h2>
+                    <h2 className="text-3xl font-bold mb-6">The Artist&#39;s Vision</h2>
 
                     <p className="text-gray-700 mb-6">
                         With a distinctive blend of classical training and contemporary innovation,
@@ -96,11 +96,11 @@ export default function AboutPage() {
                     <div className="my-12 p-8 bg-gradient-to-br from-yellow-50 to-pink-50 rounded-xl">
                         <h3 className="text-2xl font-semibold mb-4">Artistic Philosophy</h3>
                         <p className="text-gray-700 mb-4">
-                            "I believe art should be both a reflection of our times and a window into
+                            &quot;I believe art should be both a reflection of our times and a window into
                             possibility. Each piece I create is a conversation between tradition and
                             innovation, between the familiar and the unexpected. My work aims to create
                             spaces where different cultural expressions can meet and transform into
-                            something entirely new."
+                            something entirely new.&quot;
                         </p>
                         <p className="text-gray-500 italic">- Van Robert</p>
                     </div>
@@ -109,7 +109,7 @@ export default function AboutPage() {
                             <h3 className="text-2xl font-semibold mb-4">Background & Influence</h3>
                             <p className="text-gray-700">
                                 Drawing from his rich cultural heritage and global experiences,
-                                Van Robert's work is characterized by bold color combinations,
+                                Van Robert&apos;s work is characterized by bold color combinations,
                                 dynamic compositions, and a deep understanding of how art can
                                 transcend cultural boundaries. His unique perspective has been
                                 shaped by years of studying both classical techniques and

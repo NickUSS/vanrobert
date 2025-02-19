@@ -6,7 +6,12 @@ import { useRouter } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
 import Cart from '@/components/shop/Cart'
 import FramePreview from '@/components/shop/FramePreview'
-import Navbar from '@/components/layout/Navbar'
+import {Navbar} from "@/components/layout";
+
+interface ArtworkClientProps {
+    id: string;
+}
+
 
 interface Artwork {
     id: string;
@@ -312,230 +317,260 @@ const artworks: Artwork[] = [
     },
 ];
 
-const categories = ['All', 'Abstract', 'Portrait'];
-
-const priceRanges = [
-    { label: 'All Prices', value: 'all' },
-    { label: 'Under $3000', value: 'under-3000' },
-    { label: '$10000 - $20000', value: '10000-20000' },
-    { label: '$20000 - $30000', value: '20000-30000' },
-    { label: 'Over $40000', value: 'over-40000' }
-];
-
-export default function ArtWorksPage() {
+export default function ArtworkClient({ id }: ArtworkClientProps) {
     const router = useRouter()
+    const { addItem, items } = useCart()
+    const [selectedImage, setSelectedImage] = useState(0)
     const [isCartOpen, setIsCartOpen] = useState(false)
     const [isFramePreviewOpen, setIsFramePreviewOpen] = useState(false)
-    const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
-    const [activeCategory, setActiveCategory] = useState('All')
-    const [activePriceRange, setActivePriceRange] = useState('all')
-    const { addItem, items } = useCart()
 
-    const handleFrameSelect = (frame: string) => {
-        if (selectedArtwork) {
-            addItem({
-                id: `${selectedArtwork.id}-${frame}`,
-                title: selectedArtwork.title,
-                price: selectedArtwork.price,
-                image: selectedArtwork.image,
-                frame,
-                quantity: 1
-            })
-            setIsFramePreviewOpen(false)
-            setIsCartOpen(true)
-        }
+    const artwork = artworks.find(art => art.id === id)
+
+    if (!artwork) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-3xl font-bold mb-4">Artwork Not Found</h1>
+                    <button
+                        onClick={() => router.push('/shop')}
+                        className="px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+                    >
+                        Return to Gallery
+                    </button>
+                </div>
+            </div>
+        )
     }
 
-    const filteredArtworks = artworks
-        .filter(art => activeCategory === 'All' || art.category === activeCategory)
-        .filter(art => {
-            switch (activePriceRange) {
-                case 'under-1000':
-                    return art.price < 1000;
-                case '1000-2000':
-                    return art.price >= 1000 && art.price < 2000;
-                case '2000-3000':
-                    return art.price >= 2000 && art.price < 3000;
-                case 'over-3000':
-                    return art.price >= 3000;
-                default:
-                    return true;
-            }
-        });
+    const handleFrameSelect = (frame: string) => {
+        addItem({
+            id: `${artwork.id}-${frame}`,
+            title: artwork.title,
+            price: artwork.price,
+            image: artwork.image,
+            frame,
+            quantity: 1
+        })
+        setIsFramePreviewOpen(false)
+        setIsCartOpen(true)
+    }
+
+    const allImages = [artwork.image, ...artwork.additionalImages]
+
     return (
         <>
             <Navbar />
-            <main className="min-h-screen bg-white pt-24">
-                {/* Header Section */}
-                <section className="relative h-[60vh] bg-black overflow-hidden">
-                    <Image
-                        src="/images/artworks.jpg"
-                        alt="Art Collection"
-                        fill
-                        className="object-cover opacity-60"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
-                    <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl md:text-7xl font-bold text-white mb-6 text-center"
+            <div className="min-h-screen bg-white pt-24">
+                <div className="container mx-auto px-4 py-12">
+                    {/* Breadcrumb */}
+                    <div className="mb-8">
+                        <button
+                            onClick={() => router.push('/shop/art-works')}
+                            className="text-gray-600 hover:text-black flex items-center gap-2 transition-colors"
                         >
-                            Art Collection
-                        </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-xl md:text-2xl text-white/90 text-center max-w-2xl"
-                        >
-                            Discover and collect unique masterpieces by Van Robert
-                        </motion.p>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back to Gallery
+                        </button>
                     </div>
-                </section>
 
-                {/* Filters Section */}
-                <section className="sticky top-24 z-20 bg-white border-b">
-                    <div className="container mx-auto px-4 py-6">
-                        <div className="flex flex-wrap gap-4 justify-between items-center">
-                            {/* Categories */}
-                            <div className="flex gap-3 overflow-x-auto pb-2 flex-grow">
-                                {categories.map((category) => (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        {/* Galería de Imágenes */}
+                        <div className="space-y-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="rounded-xl overflow-hidden"
+                            >
+                                <Image
+                                    src={allImages[selectedImage]}
+                                    alt={artwork.title}
+                                    width={0}
+                                    height={0}
+                                    sizes="100vw"
+                                    className="w-auto h-auto"
+                                    priority
+                                    unoptimized
+                                />
+                            </motion.div>
+
+                            {/* Miniaturas */}
+                            <div className="flex gap-4 overflow-x-auto pb-2">
+                                {allImages.map((img, index) => (
                                     <motion.button
-                                        key={category}
+                                        key={index}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        onClick={() => setActiveCategory(category)}
-                                        className={`px-6 py-2 rounded-full whitespace-nowrap
-                                             transition-colors ${
-                                            activeCategory === category
-                                                ? 'bg-black text-white'
-                                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                                        }`}
+                                        onClick={() => setSelectedImage(index)}
+                                        className={`relative w-24 aspect-square rounded-lg overflow-hidden
+                                              ${selectedImage === index ? 'ring-2 ring-black' : ''}`}
                                     >
-                                        {category}
+                                        <Image
+                                            src={img}
+                                            alt={`${artwork.title} view ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                        />
                                     </motion.button>
                                 ))}
                             </div>
-
-                            {/* Price Range Filter */}
-                            <select
-                                value={activePriceRange}
-                                onChange={(e) => setActivePriceRange(e.target.value)}
-                                className="px-4 py-2 border rounded-lg bg-white"
-                            >
-                                {priceRanges.map((range) => (
-                                    <option key={range.value} value={range.value}>
-                                        {range.label}
-                                    </option>
-                                ))}
-                            </select>
                         </div>
-                    </div>
-                </section>
-                {/* Artworks Grid */}
-                <div className="container mx-auto px-4 py-12">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {filteredArtworks.map((artwork) => (
-                            <motion.div
-                                key={artwork.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="group bg-white rounded-xl shadow-lg overflow-hidden
-                         hover:shadow-xl transition-all duration-300"
-                            >
-                                <div
-                                    className="relative aspect-[3/4] cursor-pointer"
-                                    onClick={() => router.push(`/shop/art-works/${artwork.id}`)}
+
+                        {/* Información de la Obra */}
+                        <div className="space-y-8">
+                            <div>
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="text-4xl font-bold mb-4"
                                 >
-                                    <Image
-                                        src={artwork.image}
-                                        alt={artwork.title}
-                                        fill
-                                        className="object-cover group-hover:scale-105
-                                 transition-transform duration-500"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent
-                                  opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                                  flex items-end p-6">
-                                        <div className="text-white">
-                                            <h3 className="text-xl font-bold mb-2">{artwork.title}</h3>
-                                            <p className="text-sm opacity-90">{artwork.medium}</p>
-                                            <p className="text-sm opacity-90">{artwork.dimensions}</p>
-                                            <p className="text-sm font-medium mt-3 flex items-center gap-2">
-                                                Click to view details
-                                                <svg
-                                                    className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                          d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                                </svg>
-                                            </p>
-                                        </div>
+                                    {artwork.title}
+                                </motion.h1>
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="flex items-center gap-4"
+                                >
+                                    <span className="text-3xl font-bold">${artwork.price.toLocaleString()}</span>
+                                    <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                                        {artwork.category}
+                                    </span>
+                                </motion.div>
+                            </div>
+
+                            {/* Detalles Técnicos */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3 }}
+                                className="space-y-6"
+                            >
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <h3 className="text-gray-500 text-sm">Artist</h3>
+                                        <p className="font-medium">{artwork.artist}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-gray-500 text-sm">Year</h3>
+                                        <p className="font-medium">{artwork.dateCreated}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-gray-500 text-sm">Medium</h3>
+                                        <p className="font-medium">{artwork.medium}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-gray-500 text-sm">Dimensions</h3>
+                                        <p className="font-medium">{artwork.dimensions}</p>
                                     </div>
                                 </div>
-                                <div className="p-6">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-2xl font-bold">${artwork.price.toLocaleString()}</span>
-                                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
-                            {artwork.category}
-                        </span>
+
+                                {/* Descripción */}
+                                <div>
+                                    <h3 className="text-xl font-semibold mb-3">About this piece</h3>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        {artwork.description}
+                                    </p>
+                                </div>
+
+                                {/* Disponibilidad y Certificado */}
+                                <div className="bg-gray-50 p-6 rounded-xl space-y-4">
+                                    <div>
+                                        <h3 className="font-semibold text-lg mb-2">Availability</h3>
+                                        <p className="text-gray-600">{artwork.availability}</p>
                                     </div>
-                                    <div className="space-y-3">
-                                        <motion.button
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => router.push(`/shop/art-works/${artwork.id}`)}
-                                            className="w-full px-6 py-3 bg-white text-black border-2 border-black rounded-full
-                                     hover:bg-gray-100 transition-colors flex items-center
-                                     justify-center gap-2 group"
-                                        >
-                                            <span>View Details</span>
-                                            <svg
-                                                className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </motion.button>
-                                        <motion.button
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => {
-                                                setSelectedArtwork(artwork)
-                                                setIsFramePreviewOpen(true)
-                                            }}
-                                            className="w-full px-6 py-3 bg-black text-white rounded-full
-                                     hover:bg-gray-800 transition-colors flex items-center
-                                     justify-center gap-2 group"
-                                        >
-                                            <span>Add to Cart</span>
-                                            <svg
-                                                className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                      d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                            </svg>
-                                        </motion.button>
+                                    <div>
+                                        <h3 className="font-semibold text-lg mb-2">Authentication</h3>
+                                        <p className="text-gray-600">{artwork.certificateInfo}</p>
                                     </div>
+                                </div>
+
+                                {/* Botones de Acción */}
+                                <div className="space-y-4 pt-6">
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => setIsFramePreviewOpen(true)}
+                                        className="w-full px-8 py-4 bg-black text-white rounded-full
+                                             hover:bg-gray-800 transition-colors flex items-center
+                                             justify-center gap-3 text-lg font-medium"
+                                    >
+                                        Add to Cart
+                                        <svg
+                                            className="w-6 h-6"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                            />
+                                        </svg>
+                                    </motion.button>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => {
+                                            // Aquí puedes agregar la lógica para contactar al artista
+                                        }}
+                                        className="w-full px-8 py-4 border-2 border-black text-black rounded-full
+                                             hover:bg-gray-100 transition-colors flex items-center
+                                             justify-center gap-3 text-lg font-medium"
+                                    >
+                                        Contact About This Piece
+                                        <svg
+                                            className="w-6 h-6"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                            />
+                                        </svg>
+                                    </motion.button>
+                                </div>
+
+                                {/* Información Adicional */}
+                                <div className="border-t pt-6">
+                                    <h3 className="text-lg font-semibold mb-4">Additional Information</h3>
+                                    <ul className="space-y-3 text-gray-600">
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                      d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Professional packaging and shipping
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                      d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Certificate of authenticity included
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                      d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Ready to hang
+                                        </li>
+                                    </ul>
                                 </div>
                             </motion.div>
-                        ))}
+                        </div>
                     </div>
                 </div>
+
                 {/* Cart Button */}
                 <motion.button
                     whileHover={{ scale: 1.1 }}
@@ -558,15 +593,13 @@ export default function ArtWorksPage() {
 
                 {/* Modals */}
                 <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-                {selectedArtwork && (
-                    <FramePreview
-                        isOpen={isFramePreviewOpen}
-                        onClose={() => setIsFramePreviewOpen(false)}
-                        artwork={selectedArtwork}
-                        onFrameSelect={handleFrameSelect}
-                    />
-                )}
-            </main>
+                <FramePreview
+                    isOpen={isFramePreviewOpen}
+                    onClose={() => setIsFramePreviewOpen(false)}
+                    artwork={artwork}
+                    onFrameSelect={handleFrameSelect}
+                />
+            </div>
         </>
     )
 }

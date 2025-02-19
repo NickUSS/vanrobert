@@ -51,7 +51,7 @@ export default function CancelPage() {
                         Your order has been cancelled and no payment was processed.
                     </p>
                     <p className="text-gray-400 mb-12">
-                        If you experienced any issues during checkout, please don't hesitate to contact us.
+                        If you experienced any issues during checkout, please don&#39;t hesitate to contact us.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
