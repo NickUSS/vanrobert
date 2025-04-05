@@ -39,7 +39,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description: "This vibrant abstract painting captures the essence of chaos and creativity. The piece showcases a masterful blend of colors and techniques, creating a dynamic and engaging visual experience. Each brushstroke has been carefully considered to contribute to the overall composition, resulting in a piece that continues to reveal new details with each viewing.",
         dimensions: "18\" x 48\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -58,7 +58,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description: "\"Breath\" is an abstract painting that evokes a sense of movement and depth through its fluid composition. Dominated by shades of green, turquoise, and yellow, the piece features a swirling energy at its center, resembling an organic burst or a breath of life. Textured elements and delicate ripples add dimension, while the contrast between dark and light tones creates a dynamic, almost ethereal atmosphere. The painting invites the viewer to feel the flow of energy and emotion within its vibrant strokes.",
         dimensions: "22\" x 32\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -77,7 +77,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description: "\"Emotions Found\" is a vibrant abstract piece that blends warm and cool tones in a dynamic vertical flow. Swirling shapes and bold textures create a sense of movement, evoking deep emotional expression and energy.",
         dimensions: "22\" x 28\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -96,7 +96,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description: "\"Ancient Face\" features a human profile silhouette emerging from an explosion of colors and abstract shapes. With dark tones and vibrant bursts of red, yellow, and blue, the piece evokes a sense of mysticism and connection to the past. Its fluid and expressive composition suggests a fusion between the human and the ethereal.",
         dimensions: "36\" x 44\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -115,7 +115,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "Falconry is an abstract artwork featuring dynamic swirls and textures in warm tones of orange, brown, and gold, contrasted with cool turquoise. The composition suggests movement and energy, evoking the grace and power of falconry.",
         dimensions: "30\" x 60\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -134,7 +134,7 @@ const artworks: Artwork[] = [
         category: "Portrait",
         description:  "\"The Lady\" is a striking artwork depicting a woman in a moment of elegance and introspection. She is dressed in a flowing, off-shoulder gown, holding a glass of wine. The background features a blend of dark and warm tones, highlighting her graceful pose and serene expression. The use of light and shadow adds depth and emotion to the piece.",
         dimensions: "40\" x 50\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -153,7 +153,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Angel Dance\" is an abstract artwork with vibrant swirls of blue, green, orange, and red, capturing dynamic and ethereal movement.",
         dimensions: "30\" x 40\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -172,7 +172,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Jazz Night\" depicts a musician playing a saxophone, surrounded by vibrant bursts of color. The artwork captures the lively and soulful essence of a jazz performance.",
         dimensions: "24\" x 36\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -191,7 +191,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Illusions Seller\" is an abstract piece with vibrant splashes of red, green, and yellow. The dynamic forms and colors create a sense of mystery and movement, evoking the concept of illusions.",
         dimensions: "30\" x 50\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -210,7 +210,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Coming from There\" portrays the journey of an immigrant starting anew. The artwork uses vibrant colors and dynamic forms to symbolize hope, struggle, and the pursuit of dreams. The swirling motion reflects the challenges and aspirations of beginning from the bottom.",
         dimensions: "30\" x 48\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -229,7 +229,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Perfect Combination\" features a vibrant fusion of musical instruments, including a saxophone and a violin. The artwork uses bold colors and dynamic forms to convey harmony and the blending of musical elements, creating a lively and energetic composition.",
         dimensions: "36\" x 48\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -248,7 +248,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Sunflower Dream\" is an abstract artwork with vibrant swirls of green, yellow, and orange. The colors and fluid forms evoke the essence of sunflowers, creating a dreamy and lively atmosphere.",
         dimensions: "18.5\" x 75\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -267,7 +267,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Love Seller\" is an abstract piece featuring vibrant colors like red, yellow, and green. The swirling forms and dynamic composition evoke emotions and the concept of love, creating a vivid and expressive atmosphere.",
         dimensions: "48\" x 72\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -286,7 +286,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Heart Healer\" is an abstract artwork with vibrant colors like green, red, and yellow. The swirling forms create a sense of healing and emotion, evoking the concept of mending and renewal.",
         dimensions: "52\" x 90\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
@@ -305,7 +305,7 @@ const artworks: Artwork[] = [
         category: "Abstract",
         description:  "\"Dialogue\" is an abstract piece featuring vibrant colors like blue, red, and orange. The dynamic forms suggest interaction and communication, evoking the essence of a lively conversation.",
         dimensions: "36\" x 48\"",
-        medium: "Oil on Canvas",
+        medium: "Mix on Canvas",
         dateCreated: "2023",
         availability: "One of One - Original Piece",
         certificateInfo: "Comes with a certificate of authenticity signed by the artist"
