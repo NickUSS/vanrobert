@@ -127,18 +127,20 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                                         Frame: {item.frame}
                                                     </p>
                                                 )}
-                                                <div className="flex items-center gap-4 mt-2">
-                                                    <select
-                                                        value={item.quantity}
-                                                        onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
-                                                        className="border rounded px-2 py-1"
-                                                    >
-                                                        {[1,2,3,4,5].map(num => (
-                                                            <option key={num} value={num}>
-                                                                {num}
-                                                            </option>
-                                                        ))}
-                                                    </select>
+                                                <div className="flex items-center gap-4 mt-2 relative">
+                                                    <div className="relative">
+                                                        <select
+                                                            value={item.quantity}
+                                                            onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
+                                                            className="border rounded px-2 py-1 appearance-none bg-white z-10"
+                                                        >
+                                                            {[1,2,3,4,5].map(num => (
+                                                                <option key={num} value={num}>
+                                                                    {num}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                     <button
                                                         onClick={() => removeItem(item.id)}
                                                         className="text-red-500 hover:text-red-700 text-sm"
