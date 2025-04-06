@@ -72,80 +72,6 @@ const Icons = {
             <path d="M9 21V9"/>
         </svg>
     ),
-    FashionEvents: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-            <path d="M8 14h.01"/>
-            <path d="M12 14h.01"/>
-            <path d="M16 14h.01"/>
-            <path d="M8 18h.01"/>
-            <path d="M12 18h.01"/>
-            <path d="M16 18h.01"/>
-        </svg>
-    ),
-    Collections: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-            <path d="M21 5c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-            <path d="M3 5c0 1.66 4 3 9 3s9-1.34 9-3"/>
-        </svg>
-    ),
-    Runway: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-        </svg>
-    ),
-    Clothes: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
-        </svg>
-    ),
     ArtWorks: ({ className }: { className?: string }) => (
         <svg
             className={className}
@@ -163,41 +89,6 @@ const Icons = {
             <path d="M7 12l5 5 5-5"/>
         </svg>
     ),
-    NewArrivals: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-            <circle cx="18" cy="5" r="3" fill="currentColor"/>
-        </svg>
-    ),
-    Limited: ({ className }: { className?: string }) => (
-        <svg
-            className={className}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M20 7h-7L10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
-            <path d="M12 12v6"/>
-            <path d="M9 15h6"/>
-        </svg>
-    )
 };
 
 // Interfaces
@@ -246,57 +137,15 @@ const navItems: NavItem[] = [
         ],
     },
     {
-        name: 'Fashion',
-        href: '',
-        submenu: [
-            {
-                name: 'Fashion Events',
-                description: 'Discover upcoming fashion shows and exclusive events',
-                href: '/fashion/events',
-                Icon: Icons.FashionEvents
-            },
-            {
-                name: 'Collections',
-                description: 'Explore our latest seasonal fashion collections',
-                href: '/fashion/collections',
-                Icon: Icons.Collections
-            },
-            {
-                name: 'Runway',
-                description: 'Watch our latest runway shows and presentations',
-                href: '/fashion/runway',
-                Icon: Icons.Runway
-            }
-        ]
-    },
-    {
         name: 'Shop',
         href: '',
         submenu: [
-            {
-                name: 'New Arrivals',
-                description: 'Discover our latest additions to the collection',
-                href: '/shop/new-arrivals',
-                Icon: Icons.NewArrivals
-            },
-            {
-                name: 'Clothes',
-                description: 'Explore our exclusive fashion pieces and accessories',
-                href: '/shop/clothes',
-                Icon: Icons.Clothes
-            },
             {
                 name: 'Art Works',
                 description: 'Browse and collect unique pieces of art',
                 href: '/shop/art-works',
                 Icon: Icons.ArtWorks
             },
-            {
-                name: 'Limited Edition',
-                description: 'Special collections and limited releases',
-                href: '/shop/limited',
-                Icon: Icons.Limited
-            }
         ]
     }
 ];
